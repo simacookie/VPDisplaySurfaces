@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TabletCalibration : MonoBehaviour
+public class Calibration : MonoBehaviour
 {
     [SerializeField]
     Vector3 topLeftPos;
@@ -18,10 +18,6 @@ public class TabletCalibration : MonoBehaviour
     private bool dPressed = false;
     [SerializeField]
     private bool fPressed = false;
-
-    //DEBUGING!
-    [SerializeField]
-    private bool isPlane;
 
     // Update is called once per frame
     void Update()
@@ -62,15 +58,7 @@ public class TabletCalibration : MonoBehaviour
             dPressed = false;
             fPressed = false;
 
-            //Debugging
-            if (isPlane) {
-                
-            }
-
         }
-
-        Debug.DrawLine(bottomRightPos, bottomLeftPos);
-        Debug.DrawLine(bottomLeftPos, topLeftPos);
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
             Debug.Log("Abort Calibration!");
