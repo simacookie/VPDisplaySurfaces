@@ -27,7 +27,7 @@ public class TabletCalibration : MonoBehaviour
     void Update()
     {
 
-        Debug.Log("Running!");
+        //Debug.Log("Running!");
 
         if (Input.GetKeyDown("s") && !sPressed)
         {

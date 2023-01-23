@@ -5,11 +5,11 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/moon/MoonScene.unity
-    guid: c2799b5402fca15469ff248a069027bb
-  - enabled: 1
-    path: Assets/Scenes/SpaceJam.unity
+    path: Assets/Scenes/VPDisplaySurfaces.unity
     guid: c4aee4ad2e0a10e48bfaeb2f33212fd5
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260,
