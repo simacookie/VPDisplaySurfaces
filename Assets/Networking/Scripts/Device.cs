@@ -84,6 +84,7 @@ using UnityEngine.EventSystems;
             RectTransform canvasRectTransform = canvasScreen.GetComponent<RectTransform>();
             canvasRectTransform.sizeDelta = new Vector2(newX, newY);
             canvasRectTransform.transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newY);
+            canvasRectTransform.transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newY);
 
             //screen.transform.localScale = new Vector3((newX/2)/105.5f, screen.transform.localScale.y, (newY/2)/105.5f);
 

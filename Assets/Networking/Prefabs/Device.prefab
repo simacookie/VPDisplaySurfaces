@@ -682,10 +682,10 @@ RectTransform:
   m_Father: {fileID: 4240588281298219173}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 734, y: 0}
+  m_SizeDelta: {x: 734, y: 734}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5818815770668048167
 CanvasRenderer:
@@ -3262,13 +3262,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: a7a0c74f4eb8e194385d43a74b8c3b08,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: a7a0c74f4eb8e194385d43a74b8c3b08,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 89bd0b85b3ba49948a51bc89c75c93b7, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a7a0c74f4eb8e194385d43a74b8c3b08,
         type: 3}
       propertyPath: m_Name
       value: Pointer
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a7a0c74f4eb8e194385d43a74b8c3b08,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7a0c74f4eb8e194385d43a74b8c3b08, type: 3}
