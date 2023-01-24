@@ -55,7 +55,9 @@ public class TabletCalibration : MonoBehaviour
 
             //transform.right = (bottomRightPos - bottomLeftPos);
             Quaternion rotation = Quaternion.LookRotation((bottomLeftPos - topLeftPos), test.normal);
+
             this.transform.rotation = rotation;
+            //this.transform.localEulerAngles = this.transform.localEulerAngles + new Vector3(0, 0, 180);
             this.transform.position = middle;
 
             sPressed = false;

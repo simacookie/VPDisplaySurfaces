@@ -83,8 +83,7 @@ using UnityEngine.EventSystems;
             //Canvas screen
             RectTransform canvasRectTransform = canvasScreen.GetComponent<RectTransform>();
             canvasRectTransform.sizeDelta = new Vector2(newX, newY);
-
-            //Mesh screen
+            canvasRectTransform.transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newY);
 
             //screen.transform.localScale = new Vector3((newX/2)/105.5f, screen.transform.localScale.y, (newY/2)/105.5f);
 
@@ -278,10 +277,11 @@ using UnityEngine.EventSystems;
         private static void Resolution(ushort fromClientId, Message message)
         {
             float[] resolution = message.GetFloats(2);
-            //Debug.Log(resolution[0] + " " + resolution[1] + " ist die aktuelle Aufloesung");
+            Debug.Log(resolution[0] + " " + resolution[1] + " ist die aktuelle Aufloesung");
             Device.list[fromClientId].screenX = resolution[0];
             Device.list[fromClientId].screenY = resolution[1];
             Device.list[fromClientId].ChangeDeviceSize(resolution[0], resolution[1]);
+
         }
 
 

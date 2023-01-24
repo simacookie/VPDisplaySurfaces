@@ -50,6 +50,7 @@ public class NetworkManager : MonoBehaviour
         //Subscribe local funtion to Event from Riptide 
         Server.ClientDisconnected += DeviceLeft;
         Debug.Log("SERVER IS STARTED!");
+
     }
 
     private void FixedUpdate() {
