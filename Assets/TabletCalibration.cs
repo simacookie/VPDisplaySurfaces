@@ -14,7 +14,7 @@ public class TabletCalibration : MonoBehaviour
     public Transform controllerLocator;
     Oculus.Interaction.HandVisual handVisual;
 
-
+    Plane test;
     [SerializeField]
     private bool sPressed = false;
     [SerializeField]
@@ -28,11 +28,20 @@ public class TabletCalibration : MonoBehaviour
 	private void Start()
 	{
         handVisual = GameObject.Find("RightHandVisual").GetComponent<Oculus.Interaction.HandVisual>();
-	}
+        Device.mouseMoveEvent.AddListener((clickPosition) => {
+            // Canvas has (0,0) at the center isntead of bottem left corner, offset by half screen
+            if (Input.GetKey("k"))
+            {
+                transform.position += transform.up * test.GetDistanceToPoint(rightIndexTipPos.position);
+
+                test.SetNormalAndPosition(transform.up, rightIndexTipPos.position);
+            }
+        });
+    }
 	// Update is called once per frame
 	void Update()
     {
-
+        
         //Debug.Log("Running!");
 
         if (Input.GetKeyDown("s") && !sPressed)
@@ -56,7 +65,7 @@ public class TabletCalibration : MonoBehaviour
             if (handVisual.IsVisible) topLeftPos = rightIndexTipPos.position;
             else topLeftPos = controllerLocator.position;
 
-            Plane test = new Plane(bottomRightPos, bottomLeftPos, topLeftPos);
+            test = new Plane(bottomRightPos, bottomLeftPos, topLeftPos);
 
             //Calculate middle point
             Vector3 middle = new Vector3 ((bottomRightPos.x + topLeftPos.x)/2, (bottomRightPos.y + topLeftPos.y)/2, (bottomRightPos.z + topLeftPos.z)/2);

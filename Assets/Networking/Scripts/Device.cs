@@ -1,6 +1,7 @@
 using RiptideNetworking;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 
@@ -12,7 +13,7 @@ using UnityEngine.EventSystems;
         static public bool isTouching = false;
         void Start()
         {
-     
+            ChangeDeviceSize(screenX, screenY);
         }
 
 	private void Update()
@@ -44,7 +45,9 @@ using UnityEngine.EventSystems;
         [SerializeField]
         private Canvas canvasScreen;
 
-
+        static public UnityEvent<float[]> mouseDownEvent = new UnityEvent<float[]>();
+        static public UnityEvent<float[]> mouseMoveEvent = new UnityEvent<float[]>();
+        static public UnityEvent mouseUpEvent = new UnityEvent();
 
         public float screenX = 2726;
 
@@ -270,6 +273,7 @@ using UnityEngine.EventSystems;
             Device.list[fromClientId].Move(inputs[0], inputs[1], Device.list[fromClientId].screenX, Device.list[fromClientId].screenY);
             screenTouchX = inputs[0];
             screenTouchY = inputs[1];
+        mouseMoveEvent.Invoke(inputs);
             //Debug.Log(inputs[0] + " " + inputs[1]);
         }
 
@@ -283,6 +287,23 @@ using UnityEngine.EventSystems;
             Device.list[fromClientId].ChangeDeviceSize(resolution[0], resolution[1]);
 
         }
+        [MessageHandler((ushort)ClientToServerId.mouseDown)]
 
+        private static void MouseDown(ushort fromClientId, Message message)
+        {
+            Debug.Log("MOUSE DOWN");
+            float[] clickPosition = message.GetFloats(2);
+            mouseDownEvent.Invoke(clickPosition);
 
+        }
+        [MessageHandler((ushort)ClientToServerId.mouseUp)]
+    
+        private static void MouseUp(ushort fromClientId, Message message)
+        {
+            Debug.Log("MOUSE UP");
+            float[] clickPosition = message.GetFloats(2);
+            mouseUpEvent.Invoke();
     }
+
+
+}

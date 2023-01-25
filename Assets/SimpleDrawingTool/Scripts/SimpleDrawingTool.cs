@@ -113,20 +113,20 @@ namespace SimpleDrawCanvas.Presentation
         private void Update()
         {
 #if UNITY_EDITOR
-            if (Input.GetMouseButtonDown(0))
-            {
-                StartDraw(Input.mousePosition);
-            }
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    StartDraw(Input.mousePosition);
+            //}
 
-            if (Input.GetMouseButton(0))
-            {
-                MoveDraw(Input.mousePosition);
-            }
+            //if (Input.GetMouseButton(0))
+            //{
+            //    MoveDraw(Input.mousePosition);
+            //}
 
-            if (Input.GetMouseButtonUp(0))
-            {
-                EndDraw();
-            }
+            //if (Input.GetMouseButtonUp(0))
+            //{
+            //    EndDraw();
+            //}
 
 
 #else
@@ -220,10 +220,7 @@ namespace SimpleDrawCanvas.Presentation
 
         public void StartDraw(Vector3 startPos)
         {
-            if (!IsInRectangle(Input.mousePosition))
-            {
-                return;
-            }
+
 
             _startScreenPos = startPos;
             _prevPos = startPos;
