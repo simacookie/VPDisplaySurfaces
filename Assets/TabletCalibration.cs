@@ -11,6 +11,9 @@ public class TabletCalibration : MonoBehaviour
     [SerializeField]
     Vector3 bottomRightPos;
     public Transform rightIndexTipPos;
+    public Transform controllerLocator;
+    Oculus.Interaction.HandVisual handVisual;
+
 
     [SerializeField]
     private bool sPressed = false;
@@ -22,9 +25,12 @@ public class TabletCalibration : MonoBehaviour
     //DEBUGING!
     [SerializeField]
     private bool isPlane;
-
-    // Update is called once per frame
-    void Update()
+	private void Start()
+	{
+        handVisual = GameObject.Find("RightHandVisual").GetComponent<Oculus.Interaction.HandVisual>();
+	}
+	// Update is called once per frame
+	void Update()
     {
 
         //Debug.Log("Running!");
@@ -32,21 +38,24 @@ public class TabletCalibration : MonoBehaviour
         if (Input.GetKeyDown("s") && !sPressed)
         {
             Debug.Log("S was pressed. Bottom right point is set.");
-            bottomRightPos = rightIndexTipPos.position;
+            if (handVisual.IsVisible) bottomRightPos = rightIndexTipPos.position;
+            else bottomRightPos = controllerLocator.position;
             sPressed = true;
         }
         if (Input.GetKeyDown("d") && sPressed && !dPressed)
         {
             Debug.Log("D was pressed. Bottom left point is set.");
-            bottomLeftPos = rightIndexTipPos.position;
+            if(handVisual.IsVisible) bottomLeftPos = rightIndexTipPos.position;
+            else bottomLeftPos = controllerLocator.position;
             dPressed = true;
         }
         if (Input.GetKeyDown("f") && sPressed && dPressed && !fPressed)
         {
             Debug.Log("F was pressed. Top left point is set.");
             Debug.Log("Parent objects Orientation should be set.");
-            topLeftPos = rightIndexTipPos.position;
-           
+            if (handVisual.IsVisible) topLeftPos = rightIndexTipPos.position;
+            else topLeftPos = controllerLocator.position;
+
             Plane test = new Plane(bottomRightPos, bottomLeftPos, topLeftPos);
 
             //Calculate middle point

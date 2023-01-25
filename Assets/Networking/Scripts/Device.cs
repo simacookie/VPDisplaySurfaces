@@ -10,10 +10,9 @@ using UnityEngine.EventSystems;
         static public float screenTouchX = 0;
         static public float screenTouchY = 0;
         static public bool isTouching = false;
-
         void Start()
         {
-
+     
         }
 
 	private void Update()
@@ -47,9 +46,9 @@ using UnityEngine.EventSystems;
 
 
 
-        public float screenX;
+        public float screenX = 2726;
 
-        public float screenY;
+        public float screenY = 1824;
 
         //Remove device from list, if destroyed
         private void OnDestroy()

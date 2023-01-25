@@ -27,8 +27,8 @@ public class Draw : SimpleDrawingTool
         float screenTouchYToCenterAnchor = Device.screenTouchY - .5f * device.screenY;
 
         MoveDraw(new Vector3(screenTouchXToCenterAnchor, screenTouchYToCenterAnchor));
-        Debug.Log(Device.screenTouchX);
-        Debug.Log(Device.screenTouchY);
+        //Debug.Log(Device.screenTouchX);
+        //Debug.Log(Device.screenTouchY);
         //Debug.Log(screenTouchXToCenterAnchor);
         //Debug.Log(screenTouchYToCenterAnchor);
 
