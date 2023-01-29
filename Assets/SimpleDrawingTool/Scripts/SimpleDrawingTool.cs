@@ -100,7 +100,6 @@ namespace SimpleDrawCanvas.Presentation
             Debug.Log("Is called");
             ClearCanvas();
 
-            _drawCommands.Clear();
         }
         #endregion Public methods ###
 
@@ -202,7 +201,7 @@ namespace SimpleDrawCanvas.Presentation
 
         public bool IsInRectangle(Vector3 position)
         {
-            return RectTransformUtility.RectangleContainsScreenPoint(_rectTrans, position);
+            return true;
         }
 
         public void ClearCanvas()

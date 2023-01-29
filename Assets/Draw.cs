@@ -8,6 +8,8 @@ public class Draw : SimpleDrawingTool
     public Device device;
 	private void Start()
 	{
+        SetColor(Color.red);
+        SetBrushSize(100);
 
         device = transform.parent.parent.GetComponent<Device>();
         transform.parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;

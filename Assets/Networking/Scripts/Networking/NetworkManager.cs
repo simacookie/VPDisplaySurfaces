@@ -11,8 +11,12 @@ public enum ClientToServerId : ushort {
     resolution,
     mouseDown,
     mouseUp,
-    //Test for dirst button. Needs to be changed, when more buttons are introduced.
-    buttonTest
+    clear,
+    undo,
+    red,
+    blue,
+    green,
+    yellow
 }
 
 public class NetworkManager : MonoBehaviour

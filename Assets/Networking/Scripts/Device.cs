@@ -16,6 +16,19 @@ public class Device : MonoBehaviour
     void Start()
     {
         ChangeDeviceSize(screenX, screenY);
+        clearButton = GameObject.Find("Clear");
+        undoButton = GameObject.Find("Undo");
+        redButton = GameObject.Find("Red");
+        blueButton = GameObject.Find("Blue");
+        greenButton = GameObject.Find("Green");
+        yellowButton = GameObject.Find("Yellow");
+        clearButton.GetComponent<Button>().onClick.AddListener(() => clearPressed()); 
+        undoButton.GetComponent<Button>().onClick.AddListener(() => undoPressed()); 
+        redButton.GetComponent<Button>().onClick.AddListener(() => redPressed()); 
+        blueButton.GetComponent<Button>().onClick.AddListener(() => bluePressed()); 
+        greenButton.GetComponent<Button>().onClick.AddListener(() => greenPressed()); 
+        yellowButton.GetComponent<Button>().onClick.AddListener(() => yellowPressed()); 
+
     }
 
 	private void Update()
@@ -49,7 +62,17 @@ public class Device : MonoBehaviour
 
     //First button that is synced with device
     [SerializeField]
-    private GameObject button;
+    private GameObject clearButton;
+    [SerializeField]
+    private GameObject undoButton;
+    [SerializeField]
+    private GameObject redButton;
+    [SerializeField]
+    private GameObject blueButton;
+    [SerializeField]
+    private GameObject greenButton;
+    [SerializeField]
+    private GameObject yellowButton;
     //Reference to draw tool for clearing canvas etc.
     [SerializeField]
     private GameObject drawTool;
@@ -77,6 +100,7 @@ public class Device : MonoBehaviour
         device.deviceName = string.IsNullOrEmpty(deviceName) ? $"UnnamedDevice {id}" : deviceName;
 
         list.Add(id, device);
+        
     }
 
     public void Move(float newPositionX, float newPositionZ, float sizeX, float sizeY)
@@ -94,8 +118,8 @@ public class Device : MonoBehaviour
         //Canvas screen
         RectTransform canvasRectTransform = canvasScreen.GetComponent<RectTransform>();
         canvasRectTransform.sizeDelta = new Vector2(newX, newY);
-        canvasRectTransform.transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newY);
-        canvasRectTransform.transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newY);
+        canvasRectTransform.transform.GetChild(1).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newY);
+        canvasRectTransform.transform.GetChild(1).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newY);
 
         //screen.transform.localScale = new Vector3((newX/2)/105.5f, screen.transform.localScale.y, (newY/2)/105.5f);
 
@@ -314,11 +338,67 @@ public class Device : MonoBehaviour
         mouseUpEvent.Invoke();
     }
 
-    [MessageHandler((ushort)ClientToServerId.buttonTest)]
+    [MessageHandler((ushort)ClientToServerId.clear)]
     //Simulates Button press to sync interaction from device with virtual reality
-    private static void ButtonTest(ushort fromClientId, Message message){
-        Button bt = Device.list[fromClientId].button.GetComponent<Button>();
-        bt.onClick.Invoke();
+    private static void clearButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].clearButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.undo)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void undoButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].undoButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.red)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void redButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].redButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.green)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void greenButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].greenButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.blue)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void blueButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].blueButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.yellow)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void yellowButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].yellowButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
         ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
 
         string content = message.GetString();
@@ -326,8 +406,33 @@ public class Device : MonoBehaviour
     }
 
     //Is assigned to a button
-    public void pressed (){
-        Debug.Log("Pressing works");
-        drawTool.GetComponent<SimpleDrawingTool>().Clear();
+    public void clearPressed (){
+        Debug.Log("clear");
+        drawTool.GetComponent<Draw>().Clear();
+    }
+    //Is assigned to a button
+    public void undoPressed(){
+        Debug.Log("undo");
+        drawTool.GetComponent<Draw>().Undo();
+    }
+    //Is assigned to a button
+    public void redPressed(){
+        Debug.Log("red");
+        drawTool.GetComponent<Draw>().SetColor(Color.red);
+    }
+    //Is assigned to a button
+    public void greenPressed(){
+        Debug.Log("green");
+        drawTool.GetComponent<Draw>().SetColor(Color.green);
+    }
+    //Is assigned to a button
+    public void bluePressed(){
+        Debug.Log("blue");
+        drawTool.GetComponent<Draw>().SetColor(Color.blue);
+    }
+    //Is assigned to a button
+    public void yellowPressed(){
+        Debug.Log("yellow");
+        drawTool.GetComponent<Draw>().SetColor(Color.yellow);
     }
 }
