@@ -97,6 +97,7 @@ namespace SimpleDrawCanvas.Presentation
 
         public void Clear()
         {
+            Debug.Log("Is called");
             ClearCanvas();
 
             _drawCommands.Clear();
