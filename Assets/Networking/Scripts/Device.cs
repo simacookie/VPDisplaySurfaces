@@ -9,7 +9,8 @@ using SimpleDrawCanvas.Presentation;
 
 public class Device : MonoBehaviour
 {
-
+    int mouseUpCounter = 0;
+    int mouseDownCounter = 0;
     static public float screenTouchX = 0;
     static public float screenTouchY = 0;
     static public bool isTouching = false;
@@ -435,4 +436,5 @@ public class Device : MonoBehaviour
         Debug.Log("yellow");
         drawTool.GetComponent<Draw>().SetColor(Color.yellow);
     }
+
 }

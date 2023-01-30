@@ -34,7 +34,11 @@ public class Draw : SimpleDrawingTool
             EndDraw();
         });
     }
-    void Update()
+	private void OnApplicationQuit()
+	{
+		
+	}
+	void Update()
 	{
         // start drawing on receive mousedown
 
@@ -66,6 +70,7 @@ public class Draw : SimpleDrawingTool
         //Debug.Log(screenTouchYToCenterAnchor);
 
 
-        
-	}
+
+
+    }
 }
