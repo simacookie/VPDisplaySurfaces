@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class TabletCalibration : MonoBehaviour
 {
+    public GameObject table;
+    private Vector3 startPosition;
+
+
     [SerializeField]
     Vector3 topLeftPos;
     [SerializeField]
@@ -11,10 +15,7 @@ public class TabletCalibration : MonoBehaviour
     [SerializeField]
     Vector3 bottomRightPos;
     public Transform rightIndexTipPos;
-    public Transform controllerLocator;
-    Oculus.Interaction.HandVisual handVisual;
 
-    Plane test;
     [SerializeField]
     private bool sPressed = false;
     [SerializeField]
@@ -25,47 +26,40 @@ public class TabletCalibration : MonoBehaviour
     //DEBUGING!
     [SerializeField]
     private bool isPlane;
-	private void Start()
-	{
-        handVisual = GameObject.Find("RightHandVisual").GetComponent<Oculus.Interaction.HandVisual>();
-        Device.mouseMoveEvent.AddListener((clickPosition) => {
-            // Canvas has (0,0) at the center isntead of bottem left corner, offset by half screen
-            if (Input.GetKey("k"))
-            {
-                transform.position += transform.up * test.GetDistanceToPoint(rightIndexTipPos.position);
 
-                test.SetNormalAndPosition(transform.up, rightIndexTipPos.position);
-            }
-        });
-    }
-	// Update is called once per frame
-	void Update()
+    // Update is called once per frame
+    void Update()
     {
-        
+        if (Input.GetKeyDown("t"))
+        {
+            Debug.Log("t was pressed. Table height set to Hand.");
+            table.transform.position = new Vector3(table.transform.position.x, rightIndexTipPos.position.y, table.transform.position.z);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+        }
         //Debug.Log("Running!");
 
         if (Input.GetKeyDown("s") && !sPressed)
         {
             Debug.Log("S was pressed. Bottom right point is set.");
-            if (handVisual.IsVisible) bottomRightPos = rightIndexTipPos.position;
-            else bottomRightPos = controllerLocator.position;
+            bottomRightPos = rightIndexTipPos.position;
             sPressed = true;
         }
         if (Input.GetKeyDown("d") && sPressed && !dPressed)
         {
             Debug.Log("D was pressed. Bottom left point is set.");
-            if(handVisual.IsVisible) bottomLeftPos = rightIndexTipPos.position;
-            else bottomLeftPos = controllerLocator.position;
+            bottomLeftPos = rightIndexTipPos.position;
             dPressed = true;
         }
         if (Input.GetKeyDown("f") && sPressed && dPressed && !fPressed)
         {
             Debug.Log("F was pressed. Top left point is set.");
             Debug.Log("Parent objects Orientation should be set.");
-            if (handVisual.IsVisible) topLeftPos = rightIndexTipPos.position;
-            else topLeftPos = controllerLocator.position;
-
-            test = new Plane(bottomRightPos, bottomLeftPos, topLeftPos);
+            topLeftPos = rightIndexTipPos.position;
+           
+            Plane test = new Plane(bottomRightPos, bottomLeftPos, topLeftPos);
 
             //Calculate middle point
             Vector3 middle = new Vector3 ((bottomRightPos.x + topLeftPos.x)/2, (bottomRightPos.y + topLeftPos.y)/2, (bottomRightPos.z + topLeftPos.z)/2);
@@ -73,9 +67,7 @@ public class TabletCalibration : MonoBehaviour
 
             //transform.right = (bottomRightPos - bottomLeftPos);
             Quaternion rotation = Quaternion.LookRotation((bottomLeftPos - topLeftPos), test.normal);
-
             this.transform.rotation = rotation;
-            //this.transform.localEulerAngles = this.transform.localEulerAngles + new Vector3(0, 0, 180);
             this.transform.position = middle;
 
             sPressed = false;
@@ -97,6 +89,10 @@ public class TabletCalibration : MonoBehaviour
             sPressed = false;
             dPressed = false;
             fPressed = false;
+            Debug.Log("Table height reset");
+            table.transform.position = startPosition;
+
         }
     }
+
 }
