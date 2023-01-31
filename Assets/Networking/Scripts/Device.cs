@@ -5,10 +5,24 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using SimpleDrawCanvas.Presentation;
-
+using System.Collections;
+using System.IO;
 
 public class Device : MonoBehaviour
 {
+
+    private bool timerRunning = false;
+
+    [SerializeField]
+    private float timer = 0;
+
+    [SerializeField]
+    private string file = "timers.txt";
+
+    [SerializeField]
+    private List<float> timers;
+
+    private IEnumerator coroutine;
     int mouseUpCounter = 0;
     int mouseDownCounter = 0;
     static public float screenTouchX = 0;
@@ -18,26 +32,48 @@ public class Device : MonoBehaviour
     {
         ChangeDeviceSize(screenX, screenY);
         clearButton = GameObject.Find("Clear");
-        undoButton = GameObject.Find("Undo");
+        smolButton = GameObject.Find("smol");
+        middleButton = GameObject.Find("middle");
+        bigButton = GameObject.Find("BIG");
+        previousButton = GameObject.Find("Previous");
+        startButton = GameObject.Find("Start");
+        stopButton = GameObject.Find("Stop");
+        nextButton = GameObject.Find("Next");
+        /*undoButton = GameObject.Find("Undo");
         redButton = GameObject.Find("Red");
         blueButton = GameObject.Find("Blue");
         greenButton = GameObject.Find("Green");
-        yellowButton = GameObject.Find("Yellow");
-        clearButton.GetComponent<Button>().onClick.AddListener(() => clearPressed()); 
-        undoButton.GetComponent<Button>().onClick.AddListener(() => undoPressed()); 
+        yellowButton = GameObject.Find("Yellow");*/
+        clearButton.GetComponent<Button>().onClick.AddListener(() => clearPressed());
+        smolButton.GetComponent<Button>().onClick.AddListener(() => smolPressed()); 
+        middleButton.GetComponent<Button>().onClick.AddListener(() => middlePressed()); 
+        bigButton.GetComponent<Button>().onClick.AddListener(() => bigPressed()); 
+        previousButton.GetComponent<Button>().onClick.AddListener(() => previousPressed()); 
+        startButton.GetComponent<Button>().onClick.AddListener(() => startPressed()); 
+        stopButton.GetComponent<Button>().onClick.AddListener(() => stopPressed());  
+        nextButton.GetComponent<Button>().onClick.AddListener(() => nextPressed()); 
+        /*undoButton.GetComponent<Button>().onClick.AddListener(() => undoPressed()); 
         redButton.GetComponent<Button>().onClick.AddListener(() => redPressed()); 
         blueButton.GetComponent<Button>().onClick.AddListener(() => bluePressed()); 
         greenButton.GetComponent<Button>().onClick.AddListener(() => greenPressed()); 
-        yellowButton.GetComponent<Button>().onClick.AddListener(() => yellowPressed()); 
+        yellowButton.GetComponent<Button>().onClick.AddListener(() => yellowPressed());*/
 
     }
 
 	private void Update()
 	{
 
+        if (timerRunning) {
+            timer = timer + 1 * Time.deltaTime;
+        }
+
         //Debug.Log(Device.screenTouchX);
         //Debug.Log(Device.screenTouchY);
 	}
+
+    void OnApplicationQuit(){
+        Save(timers);
+    }
 
 	//List for all Connected Devices
 	public static Dictionary<ushort, Device> list = new Dictionary<ushort, Device>();
@@ -62,10 +98,8 @@ public class Device : MonoBehaviour
     private Canvas canvasScreen;
 
     //First button that is synced with device
-    [SerializeField]
     private GameObject clearButton;
-    [SerializeField]
-    private GameObject undoButton;
+    /*private GameObject undoButton;
     [SerializeField]
     private GameObject redButton;
     [SerializeField]
@@ -73,7 +107,15 @@ public class Device : MonoBehaviour
     [SerializeField]
     private GameObject greenButton;
     [SerializeField]
-    private GameObject yellowButton;
+    private GameObject yellowButton;*/
+    private GameObject smolButton;
+    private GameObject middleButton;
+    private GameObject bigButton;
+    private GameObject previousButton;
+    private GameObject startButton;
+    private GameObject stopButton;
+    private GameObject nextButton;
+
     //Reference to draw tool for clearing canvas etc.
     [SerializeField]
     private GameObject drawTool;
@@ -350,6 +392,84 @@ public class Device : MonoBehaviour
         string content = message.GetString();
         Debug.Log(content);
     }
+    [MessageHandler((ushort)ClientToServerId.smol)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void smolButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].smolButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.middle)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void middleButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].middleButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.big)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void bigButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].bigButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.previous)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void previousButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].previousButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.start)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void startButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].startButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.stop)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void stopButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].stopButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    [MessageHandler((ushort)ClientToServerId.next)]
+    //Simulates Button press to sync interaction from device with virtual reality
+    private static void nextButtonClick(ushort fromClientId, Message message){
+        Button bt = Device.list[fromClientId].nextButton.GetComponent<Button>();
+        //bt.onClick.Invoke();
+
+        ExecuteEvents.Execute(bt.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+
+        string content = message.GetString();
+        Debug.Log(content);
+    }
+    /*
     [MessageHandler((ushort)ClientToServerId.undo)]
     //Simulates Button press to sync interaction from device with virtual reality
     private static void undoButtonClick(ushort fromClientId, Message message){
@@ -405,13 +525,62 @@ public class Device : MonoBehaviour
         string content = message.GetString();
         Debug.Log(content);
     }
-
+    */
     //Is assigned to a button
     public void clearPressed (){
         Debug.Log("clear");
         drawTool.GetComponent<Draw>().Clear();
     }
+
+    public void smolPressed () {
+        Debug.Log("smol");
+        drawTool.GetComponent<Draw>().SetBrushSize(9);
+    }
+
+    public void middlePressed () {
+        Debug.Log("middle");
+        drawTool.GetComponent<Draw>().SetBrushSize(20);
+    }
+
+    public void bigPressed () {
+        Debug.Log("big");
+        drawTool.GetComponent<Draw>().SetBrushSize(40);
+    }
+
+    public void previousPressed () {
+        Debug.Log("previous");
+        Debug.Log("Hier sollte jetzt eigentlich die Grafik geaendert werden. Das fehlt noch.");
+        //drawTool.GetComponent<Draw>().SetBrushSize(1);
+    }
+
+    public void startPressed () {
+        Debug.Log("start");
+        if (!timerRunning) {
+            timerRunning = true;
+        } else {
+            Debug.Log("Already running!");
+        }
+        //drawTool.GetComponent<Draw>().SetBrushSize(1);
+    }
+
+    public void stopPressed(){
+        Debug.Log("stop");
+        if (timerRunning) {
+            timerRunning = false;
+            timers.Add(timer);
+            timer = 0;
+        } else {
+            Debug.Log("No timer running!");
+        }
+    }
+
+    public void nextPressed () {
+        Debug.Log("next");
+        Debug.Log("Hier sollte jetzt eigentlich die Grafik geaendert werden. Das fehlt noch.");
+        //drawTool.GetComponent<Draw>().SetBrushSize(1);
+    }
     //Is assigned to a button
+    /**
     public void undoPressed(){
         Debug.Log("undo");
         drawTool.GetComponent<Draw>().Undo();
@@ -436,5 +605,28 @@ public class Device : MonoBehaviour
         Debug.Log("yellow");
         drawTool.GetComponent<Draw>().SetColor(Color.yellow);
     }
+    **/
+
+    private void Save(List<float> timersToSave) {
+        string json = "";
+        for (int i = 0; i < timersToSave.Count; i++) {
+            json = json + "Timer " + i + ": " + timersToSave[i] + System.Environment.NewLine;
+        }
+        WriteToFile(file, json);
+    }
+
+    private void WriteToFile(string fileName, string json){
+        string path = GetFilePath(fileName);
+        FileStream fileStream = new FileStream(path, FileMode.Create);
+
+        using(StreamWriter writer = new StreamWriter(fileStream)){
+            writer.Write(json);
+        }
+    }
+
+    private string GetFilePath(string fileName) {
+        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/" + fileName;
+    }
 
 }
+

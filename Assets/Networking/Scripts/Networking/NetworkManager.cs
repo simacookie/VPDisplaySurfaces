@@ -12,11 +12,18 @@ public enum ClientToServerId : ushort {
     mouseDown,
     mouseUp,
     clear,
-    undo,
+    /*undo,
     red,
     blue,
     green,
-    yellow
+    yellow*/
+    smol,
+    middle,
+    big,
+    previous,
+    start,
+    stop,
+    next
 }
 
 public class NetworkManager : MonoBehaviour
