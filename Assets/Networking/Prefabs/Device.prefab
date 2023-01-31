@@ -2073,6 +2073,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 986a001ae8409ba4bbe5254cb57f56f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer: 0
+  file: timers.txt
+  timers: []
+  traceEmoji: {fileID: 4627339641974749552}
+  fillFlower: {fileID: 9606745985355607}
   pointer: {fileID: 9015310856918649077}
   screen: {fileID: 1445057644164765385}
   canvasScreen: {fileID: 5017718746105106432}

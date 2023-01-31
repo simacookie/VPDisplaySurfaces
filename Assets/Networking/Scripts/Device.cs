@@ -7,10 +7,15 @@ using UnityEngine.EventSystems;
 using SimpleDrawCanvas.Presentation;
 using System.Collections;
 using System.IO;
-
+public enum UIState
+{
+    trace,
+    fill,
+    finished
+}
 public class Device : MonoBehaviour
 {
-
+    UIState state = UIState.trace;
     private bool timerRunning = false;
 
     [SerializeField]
@@ -22,6 +27,8 @@ public class Device : MonoBehaviour
     [SerializeField]
     private List<float> timers;
 
+    public GameObject traceEmoji;
+    public GameObject fillFlower;
     private IEnumerator coroutine;
     int mouseUpCounter = 0;
     int mouseDownCounter = 0;
@@ -534,23 +541,33 @@ public class Device : MonoBehaviour
 
     public void smolPressed () {
         Debug.Log("smol");
-        drawTool.GetComponent<Draw>().SetBrushSize(9);
+        drawTool.GetComponent<Draw>().SetBrushSize(70);
     }
 
     public void middlePressed () {
         Debug.Log("middle");
-        drawTool.GetComponent<Draw>().SetBrushSize(20);
+        drawTool.GetComponent<Draw>().SetBrushSize(100);
     }
 
     public void bigPressed () {
         Debug.Log("big");
-        drawTool.GetComponent<Draw>().SetBrushSize(40);
+        drawTool.GetComponent<Draw>().SetBrushSize(150);
     }
 
     public void previousPressed () {
-        Debug.Log("previous");
-        Debug.Log("Hier sollte jetzt eigentlich die Grafik geaendert werden. Das fehlt noch.");
-        //drawTool.GetComponent<Draw>().SetBrushSize(1);
+        switch (state)
+        {
+            case UIState.trace:
+                break;
+            case UIState.fill:
+                state = UIState.trace;
+                fillFlower.SetActive(false);
+                traceEmoji.SetActive(true);
+                drawTool.GetComponent<Draw>().Clear();
+                break;
+            default:
+                break;
+        }
     }
 
     public void startPressed () {
@@ -575,9 +592,22 @@ public class Device : MonoBehaviour
     }
 
     public void nextPressed () {
-        Debug.Log("next");
-        Debug.Log("Hier sollte jetzt eigentlich die Grafik geaendert werden. Das fehlt noch.");
-        //drawTool.GetComponent<Draw>().SetBrushSize(1);
+        switch (state)
+        {
+            case UIState.trace:
+                traceEmoji.SetActive(false);
+                fillFlower.SetActive(true);
+                drawTool.GetComponent<Draw>().Clear();
+                state = UIState.fill;
+                break;
+            case UIState.fill:
+                //state = UIState.finished;
+                Debug.Log("finished");
+                break;
+            default:
+                break; 
+        }
+
     }
     //Is assigned to a button
     /**
