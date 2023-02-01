@@ -22,8 +22,10 @@ public class Device : MonoBehaviour
     [SerializeField]
     private float timer = 0;
 
+    private int timesSaved = 0;
+
     [SerializeField]
-    private string file = "timers.txt";
+    private string file = "timers";
 
     [SerializeField]
     private List<float> timers;
@@ -83,13 +85,23 @@ public class Device : MonoBehaviour
             timer = timer + 1 * Time.deltaTime;
         }
 
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Return)) {
+            state = UIState.start;
+            fillFlower.SetActive(false);
+            traceEmoji.SetActive(false);
+            drawTool.GetComponent<Draw>().Clear();
+            this.previousButton.SetActive(false);
+            nextButtonText.GetComponent<Text>().text = "Start";
+            Save(timers);
+        }
+
         //Debug.Log(Device.screenTouchX);
         //Debug.Log(Device.screenTouchY);
 	}
 
-    void OnApplicationQuit(){
+    /*void OnApplicationQuit(){
         Save(timers);
-    }
+    }*/
 
 	//List for all Connected Devices
 	public static Dictionary<ushort, Device> list = new Dictionary<ushort, Device>();
@@ -677,10 +689,15 @@ public class Device : MonoBehaviour
 
     private void Save(List<float> timersToSave) {
         string json = "";
-        for (int i = 0; i < timersToSave.Count; i++) {
+        if (timersToSave.Count > 0) {
+            for (int i = 0; i < timersToSave.Count; i++) {
             json = json + "Timer " + i + ": " + timersToSave[i] + System.Environment.NewLine;
+            }
+            timesSaved++;
+            string fileName = file + "" + timesSaved + ".txt";
+            WriteToFile(fileName, json);
+            timersToSave.Clear();
         }
-        WriteToFile(file, json);
     }
 
     private void WriteToFile(string fileName, string json){
