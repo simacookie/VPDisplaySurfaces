@@ -12,17 +12,10 @@ public enum ClientToServerId : ushort {
     mouseDown,
     mouseUp,
     clear,
-    /*undo,
-    red,
-    blue,
-    green,
-    yellow*/
     smol,
     middle,
     big,
     previous,
-    start,
-    stop,
     next
 }
 
