@@ -9,13 +9,14 @@ using System.Collections;
 using System.IO;
 public enum UIState
 {
+    start,
     trace,
     fill,
     finished
 }
 public class Device : MonoBehaviour
 {
-    UIState state = UIState.trace;
+    UIState state = UIState.start;
     private bool timerRunning = false;
 
     [SerializeField]
@@ -35,6 +36,12 @@ public class Device : MonoBehaviour
     static public float screenTouchX = 0;
     static public float screenTouchY = 0;
     static public bool isTouching = false;
+    [SerializeField]
+    private GameObject previousButtonText;
+    [SerializeField]
+    private GameObject nextButtonText;
+
+
     void Start()
     {
         ChangeDeviceSize(screenX, screenY);
@@ -64,6 +71,8 @@ public class Device : MonoBehaviour
         blueButton.GetComponent<Button>().onClick.AddListener(() => bluePressed()); 
         greenButton.GetComponent<Button>().onClick.AddListener(() => greenPressed()); 
         yellowButton.GetComponent<Button>().onClick.AddListener(() => yellowPressed());*/
+
+        previousButton.SetActive(false);
 
     }
 
@@ -557,13 +566,29 @@ public class Device : MonoBehaviour
     public void previousPressed () {
         switch (state)
         {
+            case UIState.start:
+                break;
             case UIState.trace:
+                state = UIState.start;
+                fillFlower.SetActive(false);
+                traceEmoji.SetActive(false);
+                drawTool.GetComponent<Draw>().Clear();
+                this.previousButton.SetActive(false);
+                nextButtonText.GetComponent<Text>().text = "Start";
                 break;
             case UIState.fill:
                 state = UIState.trace;
                 fillFlower.SetActive(false);
                 traceEmoji.SetActive(true);
                 drawTool.GetComponent<Draw>().Clear();
+                nextButtonText.GetComponent<Text>().text = "▶";
+                break;
+            case UIState.finished:
+                state = UIState.fill;
+                fillFlower.SetActive(true);
+                traceEmoji.SetActive(false);
+                drawTool.GetComponent<Draw>().Clear();
+                nextButton.SetActive(true);
                 break;
             default:
                 break;
@@ -594,15 +619,28 @@ public class Device : MonoBehaviour
     public void nextPressed () {
         switch (state)
         {
+            case UIState.start:
+                traceEmoji.SetActive(true);
+                fillFlower.SetActive(false);
+                drawTool.GetComponent<Draw>().Clear();
+                state = UIState.trace;
+                previousButton.SetActive(true);
+                nextButtonText.GetComponent<Text>().text = "▶";
+                break;
             case UIState.trace:
                 traceEmoji.SetActive(false);
                 fillFlower.SetActive(true);
                 drawTool.GetComponent<Draw>().Clear();
+                nextButtonText.GetComponent<Text>().text = "End";
                 state = UIState.fill;
                 break;
             case UIState.fill:
-                //state = UIState.finished;
-                Debug.Log("finished");
+                state = UIState.finished;
+                traceEmoji.SetActive(false);
+                fillFlower.SetActive(false);
+                nextButton.SetActive(false);
+                break;
+            case UIState.finished:
                 break;
             default:
                 break; 
