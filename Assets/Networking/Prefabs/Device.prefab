@@ -2486,6 +2486,8 @@ MonoBehaviour:
   timers: []
   traceEmoji: {fileID: 4627339641974749552}
   fillFlower: {fileID: 9606745985355607}
+  ladybug: {fileID: 7147411643537748134}
+  house: {fileID: 7542212251014924921}
   previousButtonText: {fileID: 1901260525203922885}
   nextButtonText: {fileID: 6382090786366832775}
   pointer: {fileID: 9015310856918649077}

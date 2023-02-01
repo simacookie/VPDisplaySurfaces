@@ -12,6 +12,8 @@ public enum UIState
     start,
     trace,
     fill,
+    ladybug,
+    house,
     finished
 }
 public class Device : MonoBehaviour
@@ -32,6 +34,10 @@ public class Device : MonoBehaviour
 
     public GameObject traceEmoji;
     public GameObject fillFlower;
+
+    public GameObject ladybug;
+
+    public GameObject house;
     private IEnumerator coroutine;
     int mouseUpCounter = 0;
     int mouseDownCounter = 0;
@@ -52,8 +58,8 @@ public class Device : MonoBehaviour
         middleButton = GameObject.Find("middle");
         bigButton = GameObject.Find("BIG");
         previousButton = GameObject.Find("Previous");
-        startButton = GameObject.Find("Start");
-        stopButton = GameObject.Find("Stop");
+        //startButton = GameObject.Find("Start");
+        //stopButton = GameObject.Find("Stop");
         nextButton = GameObject.Find("Next");
         /*undoButton = GameObject.Find("Undo");
         redButton = GameObject.Find("Red");
@@ -65,8 +71,8 @@ public class Device : MonoBehaviour
         middleButton.GetComponent<Button>().onClick.AddListener(() => middlePressed()); 
         bigButton.GetComponent<Button>().onClick.AddListener(() => bigPressed()); 
         previousButton.GetComponent<Button>().onClick.AddListener(() => previousPressed()); 
-        startButton.GetComponent<Button>().onClick.AddListener(() => startPressed()); 
-        stopButton.GetComponent<Button>().onClick.AddListener(() => stopPressed());  
+        //startButton.GetComponent<Button>().onClick.AddListener(() => startPressed()); 
+        //stopButton.GetComponent<Button>().onClick.AddListener(() => stopPressed());  
         nextButton.GetComponent<Button>().onClick.AddListener(() => nextPressed()); 
         /*undoButton.GetComponent<Button>().onClick.AddListener(() => undoPressed()); 
         redButton.GetComponent<Button>().onClick.AddListener(() => redPressed()); 
@@ -89,9 +95,12 @@ public class Device : MonoBehaviour
             state = UIState.start;
             fillFlower.SetActive(false);
             traceEmoji.SetActive(false);
+            ladybug.SetActive(false);
+            house.SetActive(false);
             drawTool.GetComponent<Draw>().Clear();
-            this.previousButton.SetActive(false);
+            previousButton.SetActive(false);
             nextButtonText.GetComponent<Text>().text = "Start";
+            nextButton.SetActive(true);
             Save(timers);
         }
 
@@ -140,8 +149,8 @@ public class Device : MonoBehaviour
     private GameObject middleButton;
     private GameObject bigButton;
     private GameObject previousButton;
-    private GameObject startButton;
-    private GameObject stopButton;
+    //private GameObject startButton;
+    //private GameObject stopButton;
     private GameObject nextButton;
 
     //Reference to draw tool for clearing canvas etc.
@@ -464,7 +473,7 @@ public class Device : MonoBehaviour
         string content = message.GetString();
         Debug.Log(content);
     }
-    [MessageHandler((ushort)ClientToServerId.start)]
+    /*[MessageHandler((ushort)ClientToServerId.start)]
     //Simulates Button press to sync interaction from device with virtual reality
     private static void startButtonClick(ushort fromClientId, Message message){
         Button bt = Device.list[fromClientId].startButton.GetComponent<Button>();
@@ -485,7 +494,7 @@ public class Device : MonoBehaviour
 
         string content = message.GetString();
         Debug.Log(content);
-    }
+    }*/
     [MessageHandler((ushort)ClientToServerId.next)]
     //Simulates Button press to sync interaction from device with virtual reality
     private static void nextButtonClick(ushort fromClientId, Message message){
@@ -584,6 +593,8 @@ public class Device : MonoBehaviour
                 state = UIState.start;
                 fillFlower.SetActive(false);
                 traceEmoji.SetActive(false);
+                ladybug.SetActive(false);
+                house.SetActive(false);
                 drawTool.GetComponent<Draw>().Clear();
                 this.previousButton.SetActive(false);
                 nextButtonText.GetComponent<Text>().text = "Start";
@@ -592,13 +603,33 @@ public class Device : MonoBehaviour
                 state = UIState.trace;
                 fillFlower.SetActive(false);
                 traceEmoji.SetActive(true);
+                ladybug.SetActive(false);
+                house.SetActive(false);
+                drawTool.GetComponent<Draw>().Clear();
+                break;
+            case UIState.ladybug:
+                state = UIState.fill;
+                fillFlower.SetActive(true);
+                traceEmoji.SetActive(false);
+                ladybug.SetActive(false);
+                house.SetActive(false);
+                drawTool.GetComponent<Draw>().Clear();
+                break;
+            case UIState.house:
+                state = UIState.ladybug;
+                fillFlower.SetActive(false);
+                traceEmoji.SetActive(false);
+                ladybug.SetActive(true);
+                house.SetActive(false);
                 drawTool.GetComponent<Draw>().Clear();
                 nextButtonText.GetComponent<Text>().text = "▶";
                 break;
             case UIState.finished:
-                state = UIState.fill;
-                fillFlower.SetActive(true);
+                state = UIState.house;
+                fillFlower.SetActive(false);
                 traceEmoji.SetActive(false);
+                ladybug.SetActive(false);
+                house.SetActive(true);
                 drawTool.GetComponent<Draw>().Clear();
                 nextButton.SetActive(true);
                 break;
@@ -634,23 +665,59 @@ public class Device : MonoBehaviour
             case UIState.start:
                 traceEmoji.SetActive(true);
                 fillFlower.SetActive(false);
+                ladybug.SetActive(false);
+                house.SetActive(false);
                 drawTool.GetComponent<Draw>().Clear();
                 state = UIState.trace;
                 previousButton.SetActive(true);
                 nextButtonText.GetComponent<Text>().text = "▶";
+                Debug.Log("start");
+                if (!timerRunning) {
+                    timerRunning = true;
+                } else {
+                    Debug.Log("Already running!");
+                }
                 break;
             case UIState.trace:
                 traceEmoji.SetActive(false);
                 fillFlower.SetActive(true);
+                ladybug.SetActive(false);
+                house.SetActive(false);
                 drawTool.GetComponent<Draw>().Clear();
-                nextButtonText.GetComponent<Text>().text = "End";
                 state = UIState.fill;
                 break;
             case UIState.fill:
+                state = UIState.ladybug;
+                traceEmoji.SetActive(false);
+                fillFlower.SetActive(false);
+                ladybug.SetActive(true);
+                house.SetActive(false);
+                drawTool.GetComponent<Draw>().Clear();
+                break;
+            case UIState.ladybug:
+                state = UIState.house;
+                traceEmoji.SetActive(false);
+                fillFlower.SetActive(false);
+                ladybug.SetActive(false);
+                house.SetActive(true);
+                drawTool.GetComponent<Draw>().Clear();
+                nextButtonText.GetComponent<Text>().text = "End";
+                break;
+            case UIState.house:
                 state = UIState.finished;
                 traceEmoji.SetActive(false);
                 fillFlower.SetActive(false);
+                ladybug.SetActive(false);
+                house.SetActive(false);
                 nextButton.SetActive(false);
+                Debug.Log("stop");
+                if (timerRunning) {
+                    timerRunning = false;
+                    timers.Add(timer);
+                    timer = 0;
+                } else {
+                    Debug.Log("No timer running!");
+                }
                 break;
             case UIState.finished:
                 break;
