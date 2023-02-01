@@ -4304,6 +4304,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Device, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 624000215769235440, guid: d3be624aa64be344ebeb53997a2672f4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 624000215968187926, guid: d3be624aa64be344ebeb53997a2672f4,
         type: 3}
       propertyPath: m_Name
@@ -4345,6 +4350,11 @@ PrefabInstance:
       value: 'Start
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 4324545209067505578, guid: d3be624aa64be344ebeb53997a2672f4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7443127901898066043, guid: d3be624aa64be344ebeb53997a2672f4,
         type: 3}
