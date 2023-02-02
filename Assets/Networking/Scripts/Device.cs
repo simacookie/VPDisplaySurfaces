@@ -180,6 +180,8 @@ public class Device : MonoBehaviour
             house.SetActive(false);
             drawTool.GetComponent<Draw>().Clear();
             previousButton.SetActive(false);
+            endText.SetActive(false);
+            startText.SetActive(true);
             nextButtonText.GetComponent<Text>().text = "Start";
             nextButton.SetActive(true);
             Save(timers);
@@ -530,6 +532,7 @@ public class Device : MonoBehaviour
                 } else {
                     Debug.Log("No timer running!");
                 }
+                previousButton.SetActive(false);
                 break;
             case UIState.finished:
                 break;
