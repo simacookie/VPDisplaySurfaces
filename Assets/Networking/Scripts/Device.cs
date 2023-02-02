@@ -36,7 +36,7 @@ public class Device : MonoBehaviour
 
     //Name for the .txt
     [SerializeField]
-    private string file = "timers";
+    private string file = "data";
 
     //List that keeps track of multiple stopped times
     [SerializeField]
@@ -53,12 +53,12 @@ public class Device : MonoBehaviour
 
     //Fourth task background
     public GameObject house;
-    
-    //Counter for mouseUp
-    int mouseUpCounter = 0;
 
-    //Counter for mouseDown
-    int mouseDownCounter = 0;
+    //Text at the start
+    public GameObject startText;
+
+    //Text at the end
+    public GameObject endText;
 
     //Coordinate for XValue
     static public float screenTouchX = 0;
@@ -124,6 +124,16 @@ public class Device : MonoBehaviour
     //Screen size Y
     public float screenY = 1824;
 
+    //Keeps track over how many times the brush sizes have been changed
+    [SerializeField]
+    private int brushTimesPressed = 0;
+
+    //Keeps track over how many times the clear button has been pressed
+    [SerializeField]
+    private int clearTimesPressed = 0;
+
+    private GameObject currentlySelected;
+
 
     void Start()
     {
@@ -146,6 +156,10 @@ public class Device : MonoBehaviour
 
         //Deactivate the previousButton at the start
         previousButton.SetActive(false);
+
+        //Set active brushsize
+        currentlySelected = middleButton;
+        middleButton.GetComponent<Image>().color = Color.gray;
 
     }
 
@@ -206,7 +220,7 @@ public class Device : MonoBehaviour
 
         //screen.transform.localScale = new Vector3((newX/2)/105.5f, screen.transform.localScale.y, (newY/2)/105.5f);
 
-        Debug.Log("DEVICE SIZE SHOULD BE CHANGED!");
+        Debug.Log("Device size was changed!");
 
         Mesh mesh = screen.mesh;
         Vector3[] vertices = mesh.vertices;
@@ -288,7 +302,7 @@ public class Device : MonoBehaviour
     [MessageHandler((ushort)ClientToServerId.mouseDown)]
     private static void MouseDown(ushort fromClientId, Message message)
     {
-        Debug.Log("MOUSE DOWN");
+        //Debug.Log("MOUSE DOWN");
         float[] clickPosition = message.GetFloats(2);
         mouseDownEvent.Invoke(clickPosition);
 
@@ -298,7 +312,7 @@ public class Device : MonoBehaviour
     [MessageHandler((ushort)ClientToServerId.mouseUp)]  
     private static void MouseUp(ushort fromClientId, Message message)
     {
-        Debug.Log("MOUSE UP");
+        //Debug.Log("MOUSE UP");
         float[] clickPosition = message.GetFloats(2);
         mouseUpEvent.Invoke();
     }
@@ -349,25 +363,50 @@ public class Device : MonoBehaviour
     
     //Is assigned to button clear
     public void clearPressed (){
-        Debug.Log("clear");
+        //Debug.Log("clear");
+        clearTimesPressed++;
         drawTool.GetComponent<Draw>().Clear();
     }
 
     //Is assigned to button smol
     public void smolPressed () {
-        Debug.Log("smol");
+        //Debug.Log("smol");
+        brushTimesPressed++;
+        if (currentlySelected != smolButton) {
+            currentlySelected.GetComponent<Image>().color = Color.white;
+            currentlySelected = smolButton;
+            currentlySelected.GetComponent<Image>().color = Color.grey;
+        } else {
+            Debug.Log("Smol is already selected!");
+        }
         drawTool.GetComponent<Draw>().SetBrushSize(70);
     }
 
     //Is assigned to button middle
     public void middlePressed () {
-        Debug.Log("middle");
+        brushTimesPressed++;
+        //Debug.Log("middle");
+        if (currentlySelected != middleButton) {
+            currentlySelected.GetComponent<Image>().color = Color.white;
+            currentlySelected = middleButton;
+            currentlySelected.GetComponent<Image>().color = Color.grey;
+        } else {
+            Debug.Log("Middle is already selected!");
+        }
         drawTool.GetComponent<Draw>().SetBrushSize(100);
     }
 
     //Is assigned to button big
     public void bigPressed () {
-        Debug.Log("big");
+        brushTimesPressed++;
+        //Debug.Log("big");
+        if (currentlySelected != bigButton) {
+            currentlySelected.GetComponent<Image>().color = Color.white;
+            currentlySelected = bigButton;
+            currentlySelected.GetComponent<Image>().color = Color.grey;
+        } else {
+            Debug.Log("Big is already selected!");
+        }
         drawTool.GetComponent<Draw>().SetBrushSize(150);
     }
 
@@ -383,6 +422,7 @@ public class Device : MonoBehaviour
                 traceEmoji.SetActive(false);
                 ladybug.SetActive(false);
                 house.SetActive(false);
+                startText.SetActive(true);
                 drawTool.GetComponent<Draw>().Clear();
                 this.previousButton.SetActive(false);
                 nextButtonText.GetComponent<Text>().text = "Start";
@@ -418,6 +458,7 @@ public class Device : MonoBehaviour
                 traceEmoji.SetActive(false);
                 ladybug.SetActive(false);
                 house.SetActive(true);
+                endText.SetActive(false);
                 drawTool.GetComponent<Draw>().Clear();
                 nextButton.SetActive(true);
                 break;
@@ -435,6 +476,7 @@ public class Device : MonoBehaviour
                 fillFlower.SetActive(false);
                 ladybug.SetActive(false);
                 house.SetActive(false);
+                startText.SetActive(false);
                 drawTool.GetComponent<Draw>().Clear();
                 state = UIState.trace;
                 previousButton.SetActive(true);
@@ -469,7 +511,7 @@ public class Device : MonoBehaviour
                 ladybug.SetActive(false);
                 house.SetActive(true);
                 drawTool.GetComponent<Draw>().Clear();
-                nextButtonText.GetComponent<Text>().text = "End";
+                nextButtonText.GetComponent<Text>().text = "Ende";
                 break;
             case UIState.house:
                 state = UIState.finished;
@@ -477,7 +519,9 @@ public class Device : MonoBehaviour
                 fillFlower.SetActive(false);
                 ladybug.SetActive(false);
                 house.SetActive(false);
+                endText.SetActive(true);
                 nextButton.SetActive(false);
+                drawTool.GetComponent<Draw>().Clear();
                 Debug.Log("stop");
                 if (timerRunning) {
                     timerRunning = false;
@@ -503,6 +547,15 @@ public class Device : MonoBehaviour
             json = json + "Timer " + i + ": " + timersToSave[i] + System.Environment.NewLine;
             }
             timesSaved++;
+            json = json + "" + System.Environment.NewLine;
+            json = json + "////////////////////////////////////////////////" + System.Environment.NewLine;
+            json = json + "" + System.Environment.NewLine;
+            json = json + "Brush buttons pressed: " + brushTimesPressed + System.Environment.NewLine;
+            json = json + "Clear pressed: " + clearTimesPressed + System.Environment.NewLine;
+
+            brushTimesPressed = 0;
+            clearTimesPressed = 0;
+
             string fileName = file + "" + timesSaved + ".txt";
             WriteToFile(fileName, json);
             timersToSave.Clear();
@@ -521,6 +574,5 @@ public class Device : MonoBehaviour
     private string GetFilePath(string fileName) {
         return System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/" + fileName;
     }
-
 }
 

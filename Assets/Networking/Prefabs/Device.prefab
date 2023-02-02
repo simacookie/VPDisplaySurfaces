@@ -2756,12 +2756,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  file: timers
+  file: data
   timers: []
   traceEmoji: {fileID: 4627339641974749552}
   fillFlower: {fileID: 9606745985355607}
   ladybug: {fileID: 7147411643537748134}
   house: {fileID: 7542212251014924921}
+  startText: {fileID: 2991760791132346452}
+  endText: {fileID: 7198775686294317396}
   previousButtonText: {fileID: 1901260525203922885}
   nextButtonText: {fileID: 6382090786366832775}
   pointer: {fileID: 9015310856918649077}
@@ -2770,6 +2772,8 @@ MonoBehaviour:
   drawTool: {fileID: 2669385006771739700}
   screenX: 2726
   screenY: 1824
+  brushTimesPressed: 0
+  clearTimesPressed: 0
 --- !u!1 &5956348922049933388
 GameObject:
   m_ObjectHideFlags: 0
@@ -3790,7 +3794,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5307164994546701172
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4643,18 +4647,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 624000215185626177, guid: d3be624aa64be344ebeb53997a2672f4,
         type: 3}
+      propertyPath: m_Text
+      value: "L\xF6schen\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 624000215185626177, guid: d3be624aa64be344ebeb53997a2672f4,
+        type: 3}
       propertyPath: m_FontData.m_MaxSize
       value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 624000215185626177, guid: d3be624aa64be344ebeb53997a2672f4,
         type: 3}
       propertyPath: m_FontData.m_FontSize
-      value: 100
+      value: 69
       objectReference: {fileID: 0}
     - target: {fileID: 624000215185626178, guid: d3be624aa64be344ebeb53997a2672f4,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -5
+      value: -44
+      objectReference: {fileID: 0}
+    - target: {fileID: 624000215467961144, guid: d3be624aa64be344ebeb53997a2672f4,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 624000215467961144, guid: d3be624aa64be344ebeb53997a2672f4,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 624000215467961144, guid: d3be624aa64be344ebeb53997a2672f4,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 624000215467961145, guid: d3be624aa64be344ebeb53997a2672f4,
         type: 3}

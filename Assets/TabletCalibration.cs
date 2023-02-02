@@ -90,7 +90,7 @@ public class TabletCalibration : MonoBehaviour
             dPressed = false;
             fPressed = false;
             Debug.Log("Table height reset");
-            table.transform.position = startPosition;
+            //table.transform.position = startPosition;
 
         }
     }
