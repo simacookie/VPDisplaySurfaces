@@ -1,0 +1,6 @@
+Timer 0: 127,4797
+
+////////////////////////////////////////////////
+
+Brush buttons pressed: 3
+Clear pressed: 2
