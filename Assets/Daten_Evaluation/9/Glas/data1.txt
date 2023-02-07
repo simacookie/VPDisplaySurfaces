@@ -1,0 +1,7 @@
+Timer 0: 247,8194
+Verfälscht!
+
+////////////////////////////////////////////////
+
+Brush buttons pressed: 3
+Clear pressed: 0
